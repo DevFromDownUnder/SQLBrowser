@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLBrowser", "SQLBrowser\SQLBrowser.csproj", "{7784F462-A0F0-469E-B928-D6C702B287A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLBrowser", "SQLBrowser\SQLBrowser.csproj", "{7784F462-A0F0-469E-B928-D6C702B287A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLBrowser.Tests", "SQLBrowser.Tests\SQLBrowser.Tests.csproj", "{A7843CD1-E4BC-4F55-A61A-3668BD795B70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7784F462-A0F0-469E-B928-D6C702B287A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7784F462-A0F0-469E-B928-D6C702B287A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7784F462-A0F0-469E-B928-D6C702B287A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7843CD1-E4BC-4F55-A61A-3668BD795B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7843CD1-E4BC-4F55-A61A-3668BD795B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7843CD1-E4BC-4F55-A61A-3668BD795B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7843CD1-E4BC-4F55-A61A-3668BD795B70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

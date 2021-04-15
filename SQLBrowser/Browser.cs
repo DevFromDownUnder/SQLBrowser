@@ -2,7 +2,7 @@
 
 namespace SQLBrowser
 {
-    public class SQLBrowser
+    public class Browser
     {
         public int Timeout { get; set; }
     }
