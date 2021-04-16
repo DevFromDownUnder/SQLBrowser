@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Text;
 using System.Collections.Concurrent;
+using SQLBrowser.Extensions;
 
 namespace SQLBrowser
 {
@@ -14,10 +15,9 @@ namespace SQLBrowser
     {
         public event EventHandler<Server> OnSQLServerDiscovered;
 
-        private ILogger<Browser> _logger;
+        private ILogger _logger;
 
         private CancellationTokenSource discoveryCancellationTokenSource;
-        private CancellationToken discoveryCancellationToken;
         private int discoveryPort;
         private UdpClient client;
 
@@ -29,18 +29,18 @@ namespace SQLBrowser
 
         public Browser() => Initialize(null, Discovery.DEFAULT_UDP_PORT);
 
-        public Browser(ILogger<Browser> logger) => Initialize(logger, Discovery.DEFAULT_UDP_PORT);
+        public Browser(ILogger logger) => Initialize(logger, Discovery.DEFAULT_UDP_PORT);
 
         public Browser(int port) => Initialize(null, port);
 
-        public Browser(ILogger<Browser> logger, int port) => Initialize(logger, port);
+        public Browser(ILogger logger, int port) => Initialize(logger, port);
 
-        private void Initialize(ILogger<Browser> logger, int port)
+        private void Initialize(ILogger logger, int port)
         {
             _logger = logger;
             discoveryPort = port;
 
-            _logger?.LogInformation($"Browser created. Port: {discoveryPort}");
+            LogAction("Browser", $"port: {port}");
 
             client = new()
             {
@@ -52,7 +52,7 @@ namespace SQLBrowser
         {
             using (var _ = new CancellationTokenSource())
             {
-                return await Discover(_.Token);
+                return await Discover(_.Token).ConfigureAwait(false);
             }
         }
 
@@ -61,16 +61,22 @@ namespace SQLBrowser
             Server[] servers = default;
 
             discoveryCancellationTokenSource?.Cancel();
-            discoveryCancellationTokenSource = new(Timeout);
+            discoveryCancellationTokenSource = new();
+
+            LogAction("Started");
+
+            discoveryCancellationTokenSource.CancelAfter(Timeout);
 
             using (var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(discoveryCancellationTokenSource.Token, cancellationToken))
             {
                 var linkedCancellationToken = linkedCancellationTokenSource.Token;
 
-                _ = Broadcast(linkedCancellationToken);
+                _ = Broadcast(linkedCancellationToken).ConfigureAwait(false);
 
-                servers = await Listen(linkedCancellationToken);
+                servers = await Listen(linkedCancellationToken).ConfigureAwait(false);
             }
+
+            LogAction("Ended");
 
             discoveryCancellationTokenSource.Cancel();
 
@@ -83,9 +89,9 @@ namespace SQLBrowser
             {
                 try
                 {
-                    await client.SendAsync(Discovery.DISCOVERY_PAYLOAD, Discovery.DISCOVERY_PAYLOAD.Length, new IPEndPoint(IPAddress.Broadcast, discoveryPort)).ConfigureAwait(false);
+                    await client.SendAsync(Discovery.CLNT_BCAST_EX, Discovery.CLNT_BCAST_EX.Length, new IPEndPoint(IPAddress.Broadcast, discoveryPort)).WithCancellation(cancellationToken).ConfigureAwait(false);
                 }
-                catch (TaskCanceledException) { }
+                catch (TaskCanceledException) { LogCancellation(); }
                 catch (Exception ex)
                 {
                     if (SendExceptionAction is Discovery.ExceptionActions.Log or Discovery.ExceptionActions.LogAndThrow)
@@ -105,6 +111,7 @@ namespace SQLBrowser
                     {
                         await Task.Delay(ResendDelay, cancellationToken).ConfigureAwait(false);
                     }
+                    catch (TaskCanceledException) { LogCancellation(); }
                     catch { }
                 }
             }
@@ -112,29 +119,17 @@ namespace SQLBrowser
 
         private async Task<Server[]> Listen(CancellationToken cancellationToken)
         {
-            var servers = new ConcurrentBag<Server>();
+            var serverList = new ConcurrentBag<Server>();
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    var result = await client.ReceiveAsync().ConfigureAwait(false);
-                    var response = Encoding.ASCII.GetString(result.Buffer);
+                    var result = await client.ReceiveAsync().WithCancellation(cancellationToken).ConfigureAwait(false);
 
-                    _ = Task.Run(() =>
-                    {
-                        try
-                        {
-                            var server = Server.ParseServer(result.RemoteEndPoint.ToString(), response);
-                            if (server != null)
-                            {
-                                OnSQLServerDiscovered?.Invoke(this, server);
-                            }
-                        }
-                        catch (TaskCanceledException) { }
-                    }, cancellationToken);
+                    _ = ProcessResponse(serverList, result.Buffer, result.RemoteEndPoint, cancellationToken).ConfigureAwait(false);
                 }
-                catch (TaskCanceledException) { }
+                catch (TaskCanceledException) { LogCancellation(); }
                 catch (Exception ex)
                 {
                     if (ReceiveExceptionAction is Discovery.ExceptionActions.Log or Discovery.ExceptionActions.LogAndThrow)
@@ -149,11 +144,52 @@ namespace SQLBrowser
                 }
             }
 
-            return servers.ToArray();
+            return serverList.ToArray();
+        }
+
+        private Task ProcessResponse(ConcurrentBag<Server> serverList, byte[] buffer, IPEndPoint responder, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    var response = ServerResponse.Parse(buffer, responder);
+                    if (response == null)
+                    {
+                        return;
+                    }
+
+                    var servers = Server.Parse(response);
+                    if (servers.Count == 0)
+                    {
+                        return;
+                    }
+
+                    foreach (var server in servers)
+                    {
+                        serverList.Add(server);
+
+                        OnSQLServerDiscovered?.Invoke(this, server);
+                    }
+                }
+                catch (TaskCanceledException) { LogCancellation(); }
+            }, cancellationToken);
+        }
+
+        private void LogCancellation([System.Runtime.CompilerServices.CallerMemberName] string name = "")
+        {
+            LogAction("Cancelled", "", name);
+        }
+
+        private void LogAction(string action, string addendum = "", [System.Runtime.CompilerServices.CallerMemberName] string name = "")
+        {
+            _logger?.LogInformation($"({name}) => {action}{(addendum != "" ? " - " + addendum : "")}");
         }
 
         public void Stop()
         {
+            LogAction("User Cancelled");
+
             discoveryCancellationTokenSource?.Cancel();
         }
     }

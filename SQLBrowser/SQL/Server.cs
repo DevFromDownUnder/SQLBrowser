@@ -8,19 +8,16 @@ namespace SQLBrowser.SQL
 {
     public class Server : EventArgs
     {
-        public string RawData { get; set; }
-        public string EndpointString { get; set; }
+        public ServerResponse Response { get; set; }
 
-        public static Server ParseServer(string endpointString, string data)
+        public static List<Server> Parse(ServerResponse response)
         {
-            var server = new Server();
+            var servers = new List<Server>();
 
-            if (string.IsNullOrWhiteSpace(data)) return null;
+            //Pass
+            servers.Add(new Server() { Response = response });
 
-            server.EndpointString = endpointString;
-            server.RawData = data;
-
-            return server;
+            return servers;
         }
     }
 }
