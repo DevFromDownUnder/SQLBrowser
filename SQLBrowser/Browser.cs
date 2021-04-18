@@ -1,18 +1,21 @@
-﻿using System;
-using SQLBrowser.SQL;
-using System.Threading;
-using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text;
-using System.Collections.Concurrent;
+﻿using Microsoft.Extensions.Logging;
 using SQLBrowser.Extensions;
+using SQLBrowser.SQL;
+using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SQLBrowser
 {
     public class Browser
     {
+        /// <summary>
+        /// Can return duplicates if ResendDelay &lt; Timeout as there is resend logic
+        /// </summary>
         public event EventHandler<Server> OnSQLServerDiscovered;
 
         private ILogger _logger;
@@ -50,10 +53,8 @@ namespace SQLBrowser
 
         public async Task<Server[]> Discover()
         {
-            using (var _ = new CancellationTokenSource())
-            {
-                return await Discover(_.Token).ConfigureAwait(false);
-            }
+            using var _ = new CancellationTokenSource();
+            return await Discover(_.Token).ConfigureAwait(false);
         }
 
         public async Task<Server[]> Discover(CancellationToken cancellationToken)
@@ -144,7 +145,7 @@ namespace SQLBrowser
                 }
             }
 
-            return serverList.ToArray();
+            return serverList.Distinct().ToArray();
         }
 
         private Task ProcessResponse(ConcurrentBag<Server> serverList, byte[] buffer, IPEndPoint responder, CancellationToken cancellationToken)
@@ -159,7 +160,7 @@ namespace SQLBrowser
                         return;
                     }
 
-                    var servers = Server.Parse(response);
+                    var servers = Servers.Parse(response);
                     if (servers.Count == 0)
                     {
                         return;

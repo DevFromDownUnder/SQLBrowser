@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace SQLBrowser.Example
 {
@@ -17,10 +18,11 @@ namespace SQLBrowser.Example
                         options.TimestampFormat = "hh:mm:ss ";
                     }));
 
-            var browser = new Browser(loggerFactory.CreateLogger<Program>());
-
-            browser.ReceiveExceptionAction = SQL.Discovery.ExceptionActions.Log;
-            browser.SendExceptionAction = SQL.Discovery.ExceptionActions.Log;
+            var browser = new Browser(loggerFactory.CreateLogger<Program>())
+            {
+                ReceiveExceptionAction = SQL.Discovery.ExceptionActions.Log,
+                SendExceptionAction = SQL.Discovery.ExceptionActions.Log
+            };
 
             browser.OnSQLServerDiscovered += Browser_OnSQLServerDiscovered;
 
@@ -29,7 +31,10 @@ namespace SQLBrowser.Example
 
             try
             {
-                await browser.Discover();
+                var result = await browser.Discover();
+
+                Console.WriteLine();
+                Console.WriteLine("[{0}]", string.Join(", ", result.OrderBy((x) => x.ToString()).Select((x) => x.ToString())));
             }
             catch (Exception ex)
             {
@@ -44,7 +49,7 @@ namespace SQLBrowser.Example
 
         private static void Browser_OnSQLServerDiscovered(object sender, SQL.Server e)
         {
-            Console.WriteLine(e.Response.Responder.ToString() + " - " + e.Response.Response);
+            Console.WriteLine(e.Response.Responder.ToString() + " - " + e.ToString());
         }
     }
 }
