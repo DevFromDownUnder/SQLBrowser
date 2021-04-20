@@ -37,6 +37,7 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '$(browserProject)'
+    configuration: '$(buildConfiguration)'
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '1'
     minorVersion: '0'
