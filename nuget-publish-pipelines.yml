@@ -43,7 +43,7 @@ steps:
     majorVersion: '1'
     minorVersion: '0'
     patchVersion: '0'
-    arguments: 'OutDir=$(Build.ArtifactStagingDirectory)'
+    basePath: '$(Build.ArtifactStagingDirectory)'
 
 - task: NuGetCommand@2
   inputs:
