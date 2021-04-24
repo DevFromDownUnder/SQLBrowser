@@ -34,15 +34,15 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'pack'
-    packagesToPack: '**/*.csproj;!**/*.Tests.csproj;!**/*.Example.csproj'
-    nobuild: true
-    configuration: '$(buildConfiguration)'
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
-    arguments: '/p:PackageId=DevFromDownUnder.SQLBrowser'
+    command: 'custom'
+    custom: 'pack'
+    arguments: >
+      **/*.csproj;!**/*.Tests.csproj;!**/*.Example.csproj
+      -p:PackageId=DevFromDownUnder.SQLBrowser
+      --output $(Build.ArtifactStagingDirectory)
+      --no-build
+      -p:Configuration=$(buildConfiguration)
+      -p:PackageVersion=$(buildVersion)
 
 - task: DotNetCoreCLI@2
   inputs:
