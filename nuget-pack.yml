@@ -46,7 +46,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)\*.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: 'SQLBrowser/latest'
 
@@ -56,6 +56,6 @@ steps:
     command: custom
     custom: nuget
     arguments: >
-      push $(Build.ArtifactStagingDirectory)\*.nupkg
+      push $(Build.ArtifactStagingDirectory)/*.nupkg
       -s https://api.nuget.org/v3/index.json
       -k $(NugetPAT)
