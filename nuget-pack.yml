@@ -53,8 +53,9 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: Nuget.org api key workaround
   inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    command: custom
+    custom: nuget
     arguments: >
+      push '$(Build.ArtifactStagingDirectory)/*.nupkg'
       -s https://api.nuget.org/v3/index.json
       -k $(NugetPAT)
