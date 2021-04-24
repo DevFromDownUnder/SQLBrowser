@@ -13,6 +13,8 @@ variables:
   solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  version: '1.0.0.0'
+  timestamp: '$(Date:yyyyMMdd)-$(Time:hhmmss)'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -41,7 +43,7 @@ steps:
       --output $(Build.ArtifactStagingDirectory)
       --no-build
       /p:Configuration=$(buildConfiguration)
-      /p:PackageVersion=1.0.0-latest
+      /p:PackageVersion=$(version)-preview-$(timestamp)
       /p:PackageId=DevFromDownUnder.SQLBrowser
 
 - task: DotNetCoreCLI@2
