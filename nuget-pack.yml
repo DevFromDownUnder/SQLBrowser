@@ -48,4 +48,4 @@ steps:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: '0c67ac28-aeab-4b5c-b8ec-e85ac6451dbc'
+    publishVstsFeed: 'SQLBrowser/latest'
