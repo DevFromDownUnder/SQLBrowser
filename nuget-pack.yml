@@ -38,11 +38,11 @@ steps:
     custom: 'pack'
     arguments: >
       $(Build.SourcesDirectory)\SQLBrowser\SQLBrowser.csproj
-      -p:PackageId=DevFromDownUnder.SQLBrowser
       --output $(Build.ArtifactStagingDirectory)
       --no-build
-      -p:Configuration=$(buildConfiguration)
-      -p:PackageVersion=latest
+      /p:Configuration=$(buildConfiguration)
+      /p:PackageVersion=latest
+      /p:PackageId=DevFromDownUnder.SQLBrowser
 
 - task: DotNetCoreCLI@2
   inputs:
