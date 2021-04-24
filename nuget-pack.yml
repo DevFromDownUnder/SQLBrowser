@@ -13,7 +13,7 @@ variables:
   solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '1.0.0.0'
+  releaseProject: '$(Build.SourcesDirectory)\SQLBrowser\SQLBrowser.csproj'
   timestamp: $[format('{0:yyyyMMddHHmmss}', pipeline.startTime)]
 
 steps:
@@ -22,6 +22,10 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
+
+- task: projectversionasvariable@1
+  inputs:
+    path: '$(releaseProject)'
 
 - task: VSBuild@1
   inputs:
@@ -39,11 +43,11 @@ steps:
     command: 'custom'
     custom: 'pack'
     arguments: >
-      $(Build.SourcesDirectory)\SQLBrowser\SQLBrowser.csproj
+      $(releaseProject)
       --output $(Build.ArtifactStagingDirectory)
       --no-build
       /p:Configuration=$(buildConfiguration)
-      /p:PackageVersion=$(version)-preview-$(timestamp)
+      /p:PackageVersion=$(Version.MajorMinorBuild)-preview-$(timestamp)
       /p:PackageId=DevFromDownUnder.SQLBrowser
 
 - task: DotNetCoreCLI@2
