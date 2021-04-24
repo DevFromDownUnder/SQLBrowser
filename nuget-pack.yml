@@ -41,7 +41,7 @@ steps:
       --output $(Build.ArtifactStagingDirectory)
       --no-build
       /p:Configuration=$(buildConfiguration)
-      /p:PackageVersion=latest
+      /p:PackageVersion=1.0.0-latest
       /p:PackageId=DevFromDownUnder.SQLBrowser
 
 - task: DotNetCoreCLI@2
