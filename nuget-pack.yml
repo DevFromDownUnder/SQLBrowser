@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -37,7 +37,7 @@ steps:
     command: 'custom'
     custom: 'pack'
     arguments: >
-      $(Build.SourcesDirectory)/SQLBrowser/SQLBrowser.csproj
+      $(Build.SourcesDirectory)\SQLBrowser\SQLBrowser.csproj
       -p:PackageId=DevFromDownUnder.SQLBrowser
       --output $(Build.ArtifactStagingDirectory)
       --no-build
@@ -47,7 +47,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)\*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: 'SQLBrowser/latest'
 
@@ -57,6 +57,6 @@ steps:
     command: custom
     custom: nuget
     arguments: >
-      push $(Build.ArtifactStagingDirectory)/*.nupkg
+      push $(Build.ArtifactStagingDirectory)\*.nupkg
       -s https://api.nuget.org/v3/index.json
       -k $(NugetPAT)
