@@ -51,8 +51,10 @@ steps:
     publishVstsFeed: 'SQLBrowser/latest'
 
 - task: DotNetCoreCLI@2
+  displayName: Nuget.org api key workaround
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'nuget'
+    arguments: >
+      -s https://api.nuget.org/v3/index.json
+      -k $(NugetPAT)
