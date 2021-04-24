@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   version: '1.0.0.0'
-  timestamp: '$(Get-Date -Format yyyyMMdd-hhmmss)'
+  timestamp: $[format('{0:yyyyMMddHHmmss}', pipeline.startTime)]
 
 steps:
 - task: NuGetToolInstaller@1
