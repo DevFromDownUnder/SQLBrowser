@@ -55,7 +55,7 @@ steps:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)\*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'SQLBrowser/latest'
+    publishVstsFeed: 'SQLBrowser/nuget-preview'
 
 - task: DotNetCoreCLI@2
   displayName: Nuget.org api key workaround
