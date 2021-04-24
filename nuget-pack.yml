@@ -37,7 +37,7 @@ steps:
     command: 'custom'
     custom: 'pack'
     arguments: >
-      **/*.csproj;!**/*.Tests.csproj;!**/*.Example.csproj
+      $(Build.SourcesDirectory)/SQLBrowser/SQLBrowser.csproj
       -p:PackageId=DevFromDownUnder.SQLBrowser
       --output $(Build.ArtifactStagingDirectory)
       --no-build
