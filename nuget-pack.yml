@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   version: '1.0.0.0'
-  timestamp: '$(Date:yyyyMMdd)-$(Time:hhmmss)'
+  timestamp: '$(Get-Date -Format yyyyMMdd-hhmmss)'
 
 steps:
 - task: NuGetToolInstaller@1
