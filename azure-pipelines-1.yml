@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
-- master
+- manual
 
 pool:
   vmImage: 'windows-latest'
@@ -47,7 +47,7 @@ steps:
       --output $(Build.ArtifactStagingDirectory)
       --no-build
       /p:Configuration=$(buildConfiguration)
-      /p:PackageVersion=$(Version.MajorMinorBuild)-preview-$(timestamp)
+      /p:PackageVersion=$(Version.MajorMinorBuild)
       /p:PackageId=DevFromDownUnder.SQLBrowser
 
 - task: DotNetCoreCLI@2
@@ -55,7 +55,7 @@ steps:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)\*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'SQLBrowser/nuget-preview'
+    publishVstsFeed: 'SQLBrowser/nuget-release'
 
 - task: DotNetCoreCLI@2
   displayName: Nuget.org api key workaround
