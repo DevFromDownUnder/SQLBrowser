@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DevFromDownUnder.SQLBrowser;
+using DevFromDownUnder.SQLBrowser.SQL;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,8 +22,8 @@ namespace SQLBrowser.Example
 
             var browser = new Browser(loggerFactory.CreateLogger<Program>())
             {
-                ReceiveExceptionAction = SQL.Discovery.ExceptionActions.Log,
-                SendExceptionAction = SQL.Discovery.ExceptionActions.Log
+                ReceiveExceptionAction = Discovery.ExceptionActions.Log,
+                SendExceptionAction = Discovery.ExceptionActions.Log
             };
 
             browser.OnSQLServerDiscovered += Browser_OnSQLServerDiscovered;
@@ -47,7 +49,7 @@ namespace SQLBrowser.Example
             Console.ReadLine();
         }
 
-        private static void Browser_OnSQLServerDiscovered(object sender, SQL.Server e)
+        private static void Browser_OnSQLServerDiscovered(object sender, Server e)
         {
             Console.WriteLine(e.Response.Responder.ToString() + " - " + e.ToString());
         }

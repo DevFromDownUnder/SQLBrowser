@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SQLBrowser.SQL
+namespace DevFromDownUnder.SQLBrowser.SQL
 {
     public class Servers : EventArgs
     {

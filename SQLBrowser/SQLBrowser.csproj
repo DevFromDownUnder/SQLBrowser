@@ -3,10 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>DevFromDownUnder</Authors>
-    <Version>1.0.1</Version>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
     <RootNamespace>DevFromDownUnder.SQLBrowser</RootNamespace>
+    <Description>SQLBrowser alternative for .NET 5 as default library does not seem to work yet</Description>
+    <PackageProjectUrl>https://github.com/DevFromDownUnder/SQLBrowser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DevFromDownUnder/SQLBrowser</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

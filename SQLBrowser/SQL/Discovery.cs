@@ -1,4 +1,4 @@
-﻿namespace SQLBrowser.SQL
+﻿namespace DevFromDownUnder.SQLBrowser.SQL
 {
     public class Discovery
     {

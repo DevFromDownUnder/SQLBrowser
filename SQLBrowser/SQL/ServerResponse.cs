@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace SQLBrowser.SQL
+namespace DevFromDownUnder.SQLBrowser.SQL
 {
     public class ServerResponse
     {

@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using SQLBrowser.Extensions;
-using SQLBrowser.SQL;
+﻿using DevFromDownUnder.SQLBrowser.Extensions;
+using DevFromDownUnder.SQLBrowser.SQL;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SQLBrowser
+namespace DevFromDownUnder.SQLBrowser
 {
     public class Browser
     {

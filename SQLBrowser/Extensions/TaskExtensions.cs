@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace SQLBrowser.Extensions
+namespace DevFromDownUnder.SQLBrowser.Extensions
 {
     public static class TaskExtensions
     {

@@ -1,3 +1,5 @@
+using DevFromDownUnder.SQLBrowser;
+using DevFromDownUnder.SQLBrowser.SQL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SQLBrowser.Tests
@@ -11,7 +13,7 @@ namespace SQLBrowser.Tests
             Browser browser;
 
             browser = new();
-            browser = new(SQL.Discovery.DEFAULT_UDP_PORT);
+            browser = new(Discovery.DEFAULT_UDP_PORT);
         }
     }
 }
