@@ -2,9 +2,12 @@
 using System.Net;
 using System.Text;
 
-namespace DevFromDownUnder.SQLBrowser.SQL
+namespace DevFromDownUnder.SQLBrowser.SQL.Network
 {
-    public class ServerResponse
+    /// <summary>
+    /// See https://docs.microsoft.com/en-us/openspecs/windows_protocols/mc-sqlr/1ea6e25f-bff9-4364-ba21-5dc449a601b7
+    /// </summary>
+    public class NetworkServerResponse
     {
         public const byte RESPONSE_ID_BYTE = 0x05;
 
@@ -18,7 +21,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL
 
         public string Response { get; set; }
 
-        public static ServerResponse Parse(byte[] buffer, IPEndPoint responder)
+        public static NetworkServerResponse Parse(byte[] buffer, IPEndPoint responder)
         {
             if (buffer == null)
             {
@@ -35,7 +38,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL
                 return null;
             }
 
-            return new ServerResponse()
+            return new NetworkServerResponse()
             {
                 Data = buffer,
                 Id = buffer[0],

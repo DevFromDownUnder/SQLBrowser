@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DevFromDownUnder.SQLBrowser.SQL
+namespace DevFromDownUnder.SQLBrowser.SQL.Network
 {
-    public class Servers : EventArgs
+    public class NetworkServers
     {
         public const string DELIMITER = ";;";
 
-        public static List<Server> Parse(ServerResponse response)
+        public static List<NetworkServer> Parse(NetworkServerResponse response)
         {
-            var result = new List<Server>();
+            var result = new List<NetworkServer>();
 
             if (response.Response.Contains(DELIMITER))
             {
@@ -17,7 +17,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL
 
                 foreach (var token in tokens)
                 {
-                    result.Add(Server.Parse(response, token));
+                    result.Add(NetworkServer.Parse(response, token));
                 }
             }
 

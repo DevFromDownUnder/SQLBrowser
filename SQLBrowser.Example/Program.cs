@@ -3,12 +3,14 @@ using DevFromDownUnder.SQLBrowser.SQL;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 
 namespace SQLBrowser.Example
 {
     internal class Program
     {
+        [SupportedOSPlatform("windows")]
         private static async Task Main(string[] args)
         {
             using ILoggerFactory loggerFactory =
@@ -20,23 +22,20 @@ namespace SQLBrowser.Example
                         options.TimestampFormat = "hh:mm:ss ";
                     }));
 
-            var browser = new Browser(loggerFactory.CreateLogger<Program>())
-            {
-                ReceiveExceptionAction = Discovery.ExceptionActions.Log,
-                SendExceptionAction = Discovery.ExceptionActions.Log
-            };
+            var browser = new Browser(loggerFactory.CreateLogger<Program>());
 
-            browser.OnSQLServerDiscovered += Browser_OnSQLServerDiscovered;
+            browser.OnServerDiscovered += Browser_OnServerDiscovered;
 
             Console.WriteLine("Searching for servers...");
             Console.WriteLine();
 
             try
             {
-                var result = await browser.Discover();
+                var result = await browser.DiscoverServers();
 
                 Console.WriteLine();
-                Console.WriteLine("[{0}]", string.Join(", ", result.OrderBy((x) => x.ToString()).Select((x) => x.ToString())));
+
+                Console.WriteLine("[{0}]", string.Join(", ", result.OrderBy((x) => x.ToString()).Select((x) => $"[{x.ServerName}, {x.Version}]")));
             }
             catch (Exception ex)
             {
@@ -49,9 +48,9 @@ namespace SQLBrowser.Example
             Console.ReadLine();
         }
 
-        private static void Browser_OnSQLServerDiscovered(object sender, Server e)
+        private static void Browser_OnServerDiscovered(object sender, Server e)
         {
-            Console.WriteLine(e.Response.Responder.ToString() + " - " + e.ToString());
+            //Console.WriteLine(e.ServerName);
         }
     }
 }

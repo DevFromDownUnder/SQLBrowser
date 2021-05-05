@@ -1,6 +1,6 @@
 ﻿namespace DevFromDownUnder.SQLBrowser.SQL
 {
-    public class Discovery
+    public class Architecture
     {
         public const int DEFAULT_TCP_PORT = 1433;
         public const int DEFAULT_UDP_PORT = 1434;
@@ -12,9 +12,7 @@
 
         public enum ExceptionActions
         {
-            None,
             Log,
-            Throw,
             LogAndThrow
         }
     }
