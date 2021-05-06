@@ -8,6 +8,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
 
         public NetworkServerResponse Response { get; set; }
 
+        //See MC-SQLR spec
 #pragma warning disable IDE1006 // Naming Styles
         public string ServerName { get; set; }
         public string InstanceName { get; set; }
@@ -102,10 +103,11 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
                 HostName = server.ServerName,
                 InstanceName = server.InstanceName,
                 IsClustered = server.IsClustered,
-                np = server.np,
+                NamedPipe = server.np,
                 rpc = server.rpc,
                 spx = server.spx,
-                tcp = server.tcp,
+                TCPPort = ushort.TryParse(server.tcp, out ushort port) ? port : null,
+                Type = Server.ServerType.Network,
                 Version = ServerVersions.GetKnownVersion(server.Version),
                 VersionString = server.Version,
                 via = server.via

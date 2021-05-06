@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Runtime.Versioning;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SQLBrowser.Example
@@ -34,8 +36,9 @@ namespace SQLBrowser.Example
                 var result = await browser.DiscoverServers();
 
                 Console.WriteLine();
+                Console.WriteLine("Json results:");
 
-                Console.WriteLine("[{0}]", string.Join(", ", result.OrderBy((x) => x.ToString()).Select((x) => $"[{x.ServerName}, {x.Version}]")));
+                Console.WriteLine(JsonSerializer.Serialize(result.OrderBy((x) => x.ToString()).ToArray(), new() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } }));
             }
             catch (Exception ex)
             {

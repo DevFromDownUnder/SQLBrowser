@@ -5,6 +5,13 @@ namespace DevFromDownUnder.SQLBrowser.SQL
 {
     public class Server
     {
+        public enum ServerType
+        {
+            Unknown,
+            Local,
+            Network
+        }
+
         private const string DEFAULT_INSTANCE = "MSSQLSERVER";
 
         public string ServerName
@@ -23,13 +30,15 @@ namespace DevFromDownUnder.SQLBrowser.SQL
         }
 
 #pragma warning disable IDE1006 // Naming Styles
+        public ServerType Type { get; set; }
         public string HostName { get; set; }
         public string InstanceName { get; set; }
         public bool IsClustered { get; set; }
         public string VersionString { get; set; }
         public ServerVersions.Version Version { get; set; }
-        public string np { get; set; }
-        public string tcp { get; set; }
+        public string NamedPipe { get; set; }
+        public bool NamedPipeEnabled { get; set; }
+        public ushort? TCPPort { get; set; }
         public string via { get; set; }
         public string rpc { get; set; }
         public string spx { get; set; }
