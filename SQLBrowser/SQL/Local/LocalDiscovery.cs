@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
-using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
