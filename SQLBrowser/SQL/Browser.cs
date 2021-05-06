@@ -38,23 +38,23 @@ namespace DevFromDownUnder.SQLBrowser
         [SupportedOSPlatform("windows")]
         public async Task<Server[]> DiscoverServers(CancellationToken cancellationToken, NetworkConfiguration configuration = null)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
-            _logger.LogInformation("Discovery started");
+            _logger?.LogInformation("Discovery started");
 
             var networkTask = DiscoverNetworkServers(cancellationToken, configuration);
             var localTask = DiscoverLocalServers(cancellationToken);
 
             var results = await Task.WhenAll<Server[]>(networkTask, localTask);
 
-            _logger.LogInformation("Discovery ended");
+            _logger?.LogInformation("Discovery ended");
 
             return results.Where(s => s != null).SelectMany(s => s).Distinct().ToArray();
         }
 
         public async Task<Server[]> DiscoverNetworkServers(CancellationToken cancellationToken, NetworkConfiguration configuration = null)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             networkDiscovery = new(_logger, configuration);
             networkDiscovery.OnNetworkServerDiscovered += OnNetworkServerDiscovered;
@@ -66,7 +66,7 @@ namespace DevFromDownUnder.SQLBrowser
         [SupportedOSPlatform("windows")]
         public async Task<Server[]> DiscoverLocalServers(CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             localDiscovery = new(_logger);
             localDiscovery.OnLocalServerDiscovered += OnLocalServerDiscovered;
@@ -77,9 +77,9 @@ namespace DevFromDownUnder.SQLBrowser
 
         public void Stop()
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
-            _logger.LogInformation("Discovery cancelled");
+            _logger?.LogInformation("Discovery cancelled");
 
             networkDiscovery?.Stop();
             localDiscovery?.Stop();

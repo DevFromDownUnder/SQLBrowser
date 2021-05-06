@@ -27,7 +27,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
         {
             _logger = logger;
 
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             if (configuration == null)
             {
@@ -49,14 +49,14 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
 
         public async Task<Server[]> DiscoverAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             Server[] servers = null;
 
             discoveryCancellationTokenSource?.Cancel();
             discoveryCancellationTokenSource = new();
 
-            _logger.LogInformation("Network discovery started");
+            _logger?.LogInformation("Network discovery started");
 
             discoveryCancellationTokenSource.CancelAfter(Configuration.Timeout);
 
@@ -69,7 +69,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
                 servers = await ListenAsync(linkedCancellationToken).ConfigureAwait(false);
             }
 
-            _logger.LogInformation("Network discovery ended");
+            _logger?.LogInformation("Network discovery ended");
 
             discoveryCancellationTokenSource.Cancel();
 
@@ -78,16 +78,16 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
 
         public void Stop()
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
-            _logger.LogInformation("Network discovery cancelled");
+            _logger?.LogInformation("Network discovery cancelled");
 
             discoveryCancellationTokenSource?.Cancel();
         }
 
         private async Task BroadcastAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -97,7 +97,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
                 }
                 catch (TaskCanceledException)
                 {
-                    _logger.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
+                    _logger?.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
                 }
                 catch (Exception ex)
                 {
@@ -117,7 +117,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
                     }
                     catch (TaskCanceledException)
                     {
-                        _logger.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
+                        _logger?.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
                     }
                     catch { }
                 }
@@ -126,7 +126,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
 
         private async Task<Server[]> ListenAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             var servers = new ConcurrentBag<Server>();
 
@@ -140,7 +140,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
                 }
                 catch (TaskCanceledException)
                 {
-                    _logger.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
+                    _logger?.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
                 }
                 catch (Exception ex)
                 {
@@ -158,7 +158,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
 
         private Task ProcessResponse(ConcurrentBag<Server> servers, byte[] buffer, IPEndPoint responder, CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             return Task.Run(() =>
             {
@@ -188,7 +188,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
                 }
                 catch (TaskCanceledException)
                 {
-                    _logger.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
+                    _logger?.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
                 }
             }, cancellationToken);
         }

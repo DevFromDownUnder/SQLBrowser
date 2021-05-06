@@ -25,7 +25,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
         {
             _logger = logger;
 
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
         }
 
         [SupportedOSPlatform("windows")]
@@ -37,14 +37,14 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
         [SupportedOSPlatform("windows")]
         public async Task<Server[]> DiscoverAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             Server[] servers = default;
 
             discoveryCancellationTokenSource?.Cancel();
             discoveryCancellationTokenSource = new();
 
-            _logger.LogInformation("Local discovery started");
+            _logger?.LogInformation("Local discovery started");
 
             using (var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(discoveryCancellationTokenSource.Token, cancellationToken))
             {
@@ -53,7 +53,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
                 servers = await GetServersAsync(linkedCancellationToken).ConfigureAwait(false);
             }
 
-            _logger.LogInformation("Local discovery ended");
+            _logger?.LogInformation("Local discovery ended");
 
             discoveryCancellationTokenSource.Cancel();
 
@@ -62,9 +62,9 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
 
         public void Stop()
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
-            _logger.LogInformation("Local discovery cancelled");
+            _logger?.LogInformation("Local discovery cancelled");
 
             discoveryCancellationTokenSource?.Cancel();
         }
@@ -72,7 +72,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
         [SupportedOSPlatform("windows")]
         private async Task<Server[]> GetServersAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             return await Task.Run(async () =>
             {
@@ -96,7 +96,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
                 }
                 catch (TaskCanceledException)
                 {
-                    _logger.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
+                    _logger?.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
                 }
 
                 return servers.Distinct().ToArray();
@@ -106,7 +106,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
         [SupportedOSPlatform("windows")]
         private Task PopulateLocalServerAsync(ConcurrentBag<Server> servers, RegistryKey hive, string instance, CancellationToken cancellationToken)
         {
-            _logger.LogDebug(LoggingExtensions.CurrentFunction());
+            _logger?.LogDebug(LoggingExtensions.CurrentFunction());
 
             return Task.Run(() =>
             {
@@ -125,7 +125,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Local
                 }
                 catch (TaskCanceledException)
                 {
-                    _logger.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
+                    _logger?.LogDebug($"[{LoggingExtensions.CurrentFunction()}] Cancelled");
                 }
             }, cancellationToken);
         }
