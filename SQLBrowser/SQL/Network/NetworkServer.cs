@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevFromDownUnder.SQLBrowser.Extensions;
+using System;
 
 namespace DevFromDownUnder.SQLBrowser.SQL.Network
 {
@@ -104,6 +105,7 @@ namespace DevFromDownUnder.SQLBrowser.SQL.Network
                 InstanceName = server.InstanceName,
                 IsClustered = server.IsClustered,
                 NamedPipe = server.np,
+                NamedPipeEnabled = server.np.HasValue(),
                 rpc = server.rpc,
                 spx = server.spx,
                 TCPPort = ushort.TryParse(server.tcp, out ushort port) ? port : null,
