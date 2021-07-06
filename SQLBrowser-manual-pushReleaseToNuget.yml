@@ -13,6 +13,7 @@ variables:
   solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  buildTargetFrameworks: 'net5.0'
   releaseProject: '$(Build.SourcesDirectory)\SQLBrowser\SQLBrowser.csproj'
   timestamp: $[format('{0:yyyyMMddHHmmss}', pipeline.startTime)]
 
@@ -22,10 +23,6 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
-
-- task: projectversionasvariable@1
-  inputs:
-    path: '$(releaseProject)'
 
 - task: VSBuild@1
   inputs:
@@ -40,7 +37,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)\SQLBrowser\bin\$(buildConfiguration)\'
+    SourceFolder: '$(Build.SourcesDirectory)\SQLBrowser\bin\$(buildConfiguration)\$(buildTargetFrameworks)\'
     Contents: 'SQLBrowser.dll'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\nuget'
 
