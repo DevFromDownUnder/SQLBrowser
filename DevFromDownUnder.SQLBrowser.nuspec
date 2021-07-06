@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>DevFromDownUnder.SQLBrowser</id>
+    <version>0.0.0</version>
+    <title>DevFromDownUnder.SQLBrowser</title>
+    <authors>DevFromDownUnder</authors>
+    <owners>DevFromDownUnder</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/DevFromDownUnder/SQLBrowser</projectUrl>
+    <repository url="https://github.com/DevFromDownUnder/SQLBrowser" />
+    <iconUrl>https://www.nuget.org/profiles/DevFromDownUnder/avatar</iconUrl>
+    <description>Library compatible with .NET 5.0 as standard libraries appear to have compatibility issues
+
+Allows for local and network SQL server discovery</description>
+    <copyright></copyright>
+    <tags>SQLBrowser SQL Server Browser</tags>
+    <dependencies>
+        <dependency id="Microsoft.Extensions.Logging" version="5.0.0" />
+        <dependency id="Microsoft.Win32.Registry" version="5.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="nuget\SQLBrowser.dll" target="lib\net5.0" />
+  </files>
+</package>

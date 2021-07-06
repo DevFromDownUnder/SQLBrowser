@@ -23,10 +23,6 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: projectversionasvariable@1
-  inputs:
-    path: '$(releaseProject)'
-
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -38,24 +34,51 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
+
+- task: CopyFiles@2
   inputs:
-    command: 'custom'
-    custom: 'pack'
-    arguments: >
-      $(releaseProject)
-      --output $(Build.ArtifactStagingDirectory)
-      --no-build
-      /p:Configuration=$(buildConfiguration)
-      /p:PackageVersion=$(Version.MajorMinorBuild)-preview-$(timestamp)
-      /p:PackageId=DevFromDownUnder.SQLBrowser
+    SourceFolder: '$(Build.SourcesDirectory)\SQLBrowser\bin\$(buildConfiguration)\'
+    Contents: '*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\nuget'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)\'
+    Contents: 'DevFromDownUnder.SQLBrowser.nuspec'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: ExecutableInfoReader@1
+  inputs:
+    fileName: '$(Build.ArtifactStagingDirectory)\nuget\SQLBrowser.dll'
+    variableRoot: 'SQLBrowser'
+    loadProductVersion: false
+    loadAssemblyVersion: true
+
+- task: SimpleNuspecVersionSetter@1
+  inputs:
+    RootDirectory: '$(Build.ArtifactStagingDirectory)'
+    NewVersion: '$(packageVersion)'
+
+- task: VariableSetTask@1
+  inputs:
+    VariableName: 'packageVersion'
+    Value: '$(SQLBrowser.AssemblyVersionInfo.Version)-preview-$(timestamp)'
+    IsSecret: false
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '$(Build.ArtifactStagingDirectory)\DevFromDownUnder.SQLBrowser.nuspec'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'packageVersion'
+    basePath: '$(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)\*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'SQLBrowser/nuget-preview'
+    publishVstsFeed: 'SQLBrowser/SQLBrowser-nuget-preview'
 
 - task: DotNetCoreCLI@2
   displayName: Nuget.org api key workaround
