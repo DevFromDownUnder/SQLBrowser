@@ -29,6 +29,14 @@ namespace DevFromDownUnder.SQLBrowser.SQL
             }
         }
 
+        public ushort Port
+        {
+            get
+            {
+                return TCPPort ?? Architecture.DEFAULT_TCP_PORT;
+            }
+        }
+
 #pragma warning disable IDE1006 // Naming Styles
         public ServerType Type { get; set; }
         public string HostName { get; set; }
